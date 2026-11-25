@@ -1,0 +1,10 @@
+@extends('layouts.app')
+@section('title', 'Demand Forecast')
+@section('content')
+    <div class="page-header"><div><p class="eyebrow">CHO planning</p><h1 class="page-title">Vaccine Demand Forecast</h1><p class="page-subtitle">Planning estimate from recorded dose consumption. Not a clinical or epidemiological prediction.</p></div></div>
+    <form method="GET" class="operations-filters forecast-filters"><select name="vaccine" aria-label="Filter by vaccine"><option value="">All vaccines</option>@foreach (['BCG', 'Hepatitis B', 'Pentavalent', 'OPV', 'IPV', 'PCV', 'MMR'] as $name)<option value="{{ $name }}" @selected($vaccine === $name)>{{ $name }}</option>@endforeach</select><select name="period" aria-label="Historical period"><option value="90" @selected($period === 90)>Last 90 days</option><option value="180" @selected($period === 180)>Last 180 days</option><option value="365" @selected($period === 365)>Last 12 months</option></select><button class="btn btn-primary" type="submit">Update forecast</button></form>
+    <section class="operations-summary"><div class="operations-metric"><span>Historical doses</span><strong>{{ $consumed }}</strong></div><div class="operations-metric"><span>Current stock</span><strong>{{ number_format($stock) }}</strong></div><div class="operations-metric"><span>Estimated next-month demand</span><strong>{{ $monthlyEstimate }}</strong></div></section>
+    <section class="panel operations-panel"><h2 class="panel-title">Consumption and demand by vaccine</h2><div class="forecast-bars">
+        @foreach ($rows as $row)<div class="forecast-row"><div class="forecast-label"><strong>{{ $row['vaccine'] }}</strong><span>History {{ $row['historical'] }} · Stock {{ $row['stock'] }} · Next month {{ $row['next_month'] }} · 3 months {{ $row['future'] }}</span></div><div class="forecast-track"><span style="width: {{ $row['bar'] }}%"></span></div></div>@endforeach
+    </div><p class="form-preview-note">Estimate uses recent recorded doses × 1.15 as a planning buffer. Future demand is a simple 3× monthly estimate; replace with validated forecasting methods in a later sprint.</p></section>
+@endsection

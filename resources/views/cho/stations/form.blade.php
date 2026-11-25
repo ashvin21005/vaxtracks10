@@ -1,0 +1,6 @@
+@extends('layouts.app')
+@section('title', 'Add Health Station')
+@section('content')
+    <div class="page-header"><div><p class="eyebrow">CHO administration</p><h1 class="page-title">Add health station</h1></div></div>
+    <section class="panel record-form-panel"><form method="POST" action="{{ route('cho.stations.store') }}">@csrf<div class="record-form-grid"><label>Station name<input name="name" value="{{ old('name') }}" required>@error('name')<small class="field-error">{{ $message }}</small>@enderror</label><label>Barangay<select name="barangay" required><option value="">Select a barangay</option>@foreach ($barangays as $barangay)<option value="{{ $barangay->official_name }}" @selected(old('barangay') === $barangay->official_name)>{{ $barangay->official_name }} — {{ $barangay->name }}</option>@endforeach</select>@error('barangay')<small class="field-error">{{ $message }}</small>@enderror</label><label>Address<input name="address" value="{{ old('address') }}"></label><label>Status<select name="status"><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></label></div><div class="form-actions"><a href="{{ route('cho.stations.index') }}" class="btn btn-secondary">Cancel</a><button class="btn btn-primary" type="submit">Create station</button></div></form></section>
+@endsection
